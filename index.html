@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impulse & Momentum Skill Builder</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            color: #2c3e50;
+        }
+        .container {
+            position: relative;
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .score-tally {
+            color: #2c3e50;
+            background: #edf2f7;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .score-tally .correct-count { color: #27ae60; }
+        .score-tally .incorrect-count { color: #e67e22; }
+        .id-tag {
+            color: #95a5a6;
+            letter-spacing: 0.5px;
+        }
+        .header-bar {
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .header-bar h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: #2c3e50;
+        }
+        .problem-statement {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        #graphCanvas {
+            background: #ffffff;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            width: 100%;
+            height: 240px;
+            display: block;
+            margin-bottom: 20px;
+        }
+        .hint-text {
+            font-size: 0.82rem;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .stage-box {
+            background: #fafafa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .stage-title {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+        .stage-disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        .input-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex: 1;
+            text-align: right;
+            padding-right: 10px;
+        }
+        .label-seq1 { color: #d35400; }
+        .label-seq2 { color: #2980b9; }
+        .label-total { color: #8e44ad; }
+        .label-stage2 { color: #27ae60; }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1.2;
+        }
+        input[type="text"] {
+            width: 140px;
+            padding: 6px 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 4px rgba(52, 152, 219, 0.3);
+        }
+        input.correct {
+            border-color: #27ae60;
+            background-color: #e8f8f5;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        input.incorrect {
+            border-color: #ee9b00;
+            background-color: #fff3cd;
+            color: #b76e00;
+            font-weight: bold;
+        }
+        .btn-unit {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-unit:hover { background-color: #d35400; }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .btn-submit {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-submit:hover { background-color: #2980b9; }
+        .btn-reset {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-reset:hover { background-color: #d35400; }
+        .feedback-banner {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .feedback-banner.success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .feedback-banner.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-bar">
+        <div class="score-tally">
+            Score: <span class="correct-count" id="correctCount">0 Correct</span> | <span class="incorrect-count" id="incorrectCount">0 Incorrect</span>
+        </div>
+        <div class="id-tag" id="idTag">ID: ------</div>
+    </div>
+    
+    <div class="header-bar">
+        <h2>Impulse & Momentum Skill Builder</h2>
+    </div>
+
+    <div class="problem-statement" id="problemStatement">
+        Loading problem statement...
+    </div>
+
+    <canvas id="graphCanvas"></canvas>
+
+    <div class="hint-text">Round all calculated numerical values to 1 decimal place. Include units in your responses.</div>
+
+    <!-- Stage 1: Segment & Total Impulse -->
+    <div class="stage-box" id="stage1Box">
+        <div class="stage-title">Stage 1: Impulse Calculation</div>
+        
+        <div class="input-row">
+            <label class="input-label label-seq1">Impulse Segment 1:</label>
+            <div class="input-wrapper">
+                <input type="text" id="inSeg1" placeholder="e.g. 40.0 N·s">
+                <button class="btn-unit" onclick="insertUnit('inSeg1', 'N·s')">N·s</button>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <label class="input-label label-seq2">Impulse Segment 2:</label>
+            <div class="input-wrapper">
+                <input type="text" id="inSeg2" placeholder="e.g. 360.0 N·s">
+                <button class="btn-unit" onclick="insertUnit('inSeg2', 'N·s')">N·s</button>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <label class="input-label label-total">Total Impulse:</label>
+            <div class="input-wrapper">
+                <input type="text" id="inTotalImpulse" placeholder="e.g. 400.0 N·s">
+                <button class="btn-unit" onclick="insertUnit('inTotalImpulse', 'N·s')">N·s</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage 2: Mass or Velocity Change -->
+    <div class="stage-box stage-disabled" id="stage2Box">
+        <div class="stage-title">Stage 2: Motion Analysis</div>
+        
+        <div class="input-row">
+            <label class="input-label label-stage2" id="lblStage2Target">Target Value:</label>
+            <div class="input-wrapper">
+                <input type="text" id="inStage2" placeholder="Value & unit">
+            </div>
+        </div>
+    </div>
+
+    <div class="feedback-banner" id="feedbackBanner"></div>
+
+    <div class="button-group">
+        <button class="btn-submit" id="btnSubmit" onclick="handleSubmit()">Check Stage 1 Answers</button>
+        <button class="btn-reset" onclick="generateProblem()">New Problem</button>
+    </div>
+</div>
+
+<script>
+    let currentProblem = {};
+    let activeStage = 1;
+    let totalCorrect = 0;
+    let totalIncorrect = 0;
+
+    const canvas = document.getElementById('graphCanvas');
+    const ctx = canvas.getContext('2d');
+    const CSS_WIDTH = 750;
+    const CSS_HEIGHT = 240;
+
+    // Helper for standard 1 decimal place rounding
+    function roundToOneDecimal(val) {
+        return Math.round(val * 10) / 10;
+    }
+
+    const sessionID = (() => {
+        const now = new Date();
+        const yy = String(now.getFullYear()).slice(-2);
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        return `ID: ${yy}${mm}${dd}${rand}`;
+    })();
+
+    document.getElementById('idTag').innerText = sessionID;
+
+    function updateScoreDisplay() {
+        document.getElementById('correctCount').innerText = `${totalCorrect} Correct`;
+        document.getElementById('incorrectCount').innerText = `${totalIncorrect} Incorrect`;
+    }
+
+    function generateProblem() {
+        activeStage = 1;
+        document.getElementById('stage2Box').classList.add('stage-disabled');
+        document.getElementById('feedbackBanner').className = 'feedback-banner';
+        document.getElementById('feedbackBanner').style.display = 'none';
+        document.getElementById('btnSubmit').innerText = 'Check Stage 1 Answers';
+
+        ['inSeg1', 'inSeg2', 'inTotalImpulse', 'inStage2'].forEach(id => {
+            const el = document.getElementById(id);
+            el.value = '';
+            el.className = '';
+            el.disabled = false;
+        });
+
+        const t1 = (Math.floor(Math.random() * 5) + 2) / 2; // 1.0s to 3.0s
+        const dt2 = (Math.floor(Math.random() * 12) + 8) / 2; // 4.0s to 9.5s
+        const t2 = t1 + dt2;
+        const F1 = (Math.floor(Math.random() * 8) + 3) * 5; // 15N to 50N
+
+        const seg1Type = Math.random() > 0.25 ? 'triangle' : 'rectangle'; 
+
+        // Raw exact area calculations
+        let rawArea1 = seg1Type === 'triangle' ? 0.5 * t1 * F1 : t1 * F1;
+        let rawArea2 = (t2 - t1) * F1;
+        let rawTotalImpulse = rawArea1 + rawArea2;
+
+        // Apply standard rounding to 1 decimal place
+        let area1 = roundToOneDecimal(rawArea1);
+        let area2 = roundToOneDecimal(rawArea2);
+        let totalImpulse = roundToOneDecimal(rawTotalImpulse);
+
+        const isFindingVelocity = Math.random() > 0.5;
+        let mass, deltaV;
+
+        if (isFindingVelocity) {
+            mass = parseFloat((Math.random() * 12 + 2).toFixed(1));
+            deltaV = roundToOneDecimal(rawTotalImpulse / mass);
+        } else {
+            deltaV = parseFloat((Math.random() * 15 + 3).toFixed(1));
+            mass = roundToOneDecimal(rawTotalImpulse / deltaV);
+        }
+
+        currentProblem = {
+            t1, t2, F1, seg1Type,
+            area1, area2, totalImpulse,
+            isFindingVelocity, mass, deltaV
+        };
+
+        if (isFindingVelocity) {
+            document.getElementById('problemStatement').innerHTML = 
+                `A force acts on a <strong>${mass.toFixed(1)} kg</strong> object according to the force-time graph below. Determine the impulse for each segment, the total impulse, and the resulting <strong>change in velocity (&Delta;v)</strong>.`;
+            document.getElementById('lblStage2Target').innerText = `Change in Velocity (\u0394v):`;
+            document.getElementById('inStage2').placeholder = `e.g. 12.4 m/s`;
+        } else {
+            document.getElementById('problemStatement').innerHTML = 
+                `An object experiences a change in velocity of <strong>${deltaV.toFixed(1)} m/s</strong> under the action of the force shown in the graph. Determine the impulse for each segment, the total impulse, and the <strong>mass (m)</strong> of the object.`;
+            document.getElementById('lblStage2Target').innerText = `Object Mass (m):`;
+            document.getElementById('inStage2').placeholder = `e.g. 3.4 kg`;
+        }
+
+        drawGraph();
+    }
+
+    function insertUnit(inputId, unitStr) {
+        const input = document.getElementById(inputId);
+        if (input.disabled) return;
+
+        let val = input.value.trim();
+        val = val.replace(/[a-zA-Z·\s]+$/, '').trim();
+        if (val.length > 0) {
+            input.value = `${val} ${unitStr}`;
+        } else {
+            input.value = unitStr;
+        }
+        input.focus();
+    }
+
+    function evaluateInput(userStr, targetVal, requiredUnitStr) {
+        if (!userStr || !userStr.trim()) return { ok: false, reason: 'empty' };
+        const trimmed = userStr.trim();
+
+        const pattern = new RegExp(`^([+-]?\\d+(?:\\.\\d+)?)\\s*(.*)$`);
+        const match = trimmed.match(pattern);
+        
+        if (!match) return { ok: false, reason: 'format' };
+
+        const numPart = match[1];
+        const unitPart = match[2];
+
+        if (!numPart.includes('.') || numPart.split('.')[1].length !== 1) {
+            return { ok: false, reason: 'decimal' };
+        }
+
+        if (unitPart !== requiredUnitStr) {
+            return { ok: false, reason: 'unit' };
+        }
+
+        const numVal = parseFloat(numPart);
+        // Correct check comparing against standard rounded target
+        const ok = Math.abs(numVal - targetVal) < 0.05;
+        
+        return { ok, numVal, reason: ok ? 'none' : 'calculation' };
+    }
+
+    function handleSubmit() {
+        const feedback = document.getElementById('feedbackBanner');
+
+        if (activeStage === 1) {
+            const val1 = document.getElementById('inSeg1').value;
+            const val2 = document.getElementById('inSeg2').value;
+            const valTot = document.getElementById('inTotalImpulse').value;
+
+            const res1 = evaluateInput(val1, currentProblem.area1, 'N·s');
+            const res2 = evaluateInput(val2, currentProblem.area2, 'N·s');
+            const resTot = evaluateInput(valTot, currentProblem.totalImpulse, 'N·s');
+
+            document.getElementById('inSeg1').className = res1.ok ? 'correct' : 'incorrect';
+            document.getElementById('inSeg2').className = res2.ok ? 'correct' : 'incorrect';
+            document.getElementById('inTotalImpulse').className = resTot.ok ? 'correct' : 'incorrect';
+
+            if (res1.ok && res2.ok && resTot.ok) {
+                totalCorrect++;
+                updateScoreDisplay();
+                
+                feedback.className = 'feedback-banner success';
+                feedback.innerText = 'Stage 1 Complete! Excellent job calculating the impulses. Now complete Stage 2.';
+                feedback.style.display = 'block';
+
+                activeStage = 2;
+                document.getElementById('stage2Box').classList.remove('stage-disabled');
+                document.getElementById('inSeg1').disabled = true;
+                document.getElementById('inSeg2').disabled = true;
+                document.getElementById('inTotalImpulse').disabled = true;
+                document.getElementById('btnSubmit').innerText = 'Check Stage 2 Answers';
+            } else {
+                totalIncorrect++;
+                updateScoreDisplay();
+
+                let reasons = [];
+                if ([res1, res2, resTot].some(r => r.reason === 'decimal')) {
+                    reasons.push('Numbers must be rounded to exactly 1 decimal place (e.g. 18.8)');
+                }
+                if ([res1, res2, resTot].some(r => r.reason === 'unit')) {
+                    reasons.push('Ensure unit "N·s" is included with a space');
+                }
+                if ([res1, res2, resTot].some(r => r.reason === 'calculation')) {
+                    reasons.push('Check your area calculations on the graph');
+                }
+
+                if (!isNaN(res1.numVal) && !isNaN(res2.numVal) && !isNaN(resTot.numVal)) {
+                    if (Math.abs((res1.numVal + res2.numVal) - resTot.numVal) > 0.05) {
+                        reasons.push('Total Impulse must equal the sum of Segment 1 and Segment 2');
+                    }
+                }
+
+                feedback.className = 'feedback-banner warning';
+                feedback.innerText = '' + (reasons.length > 0 ? reasons.join('; ') + '.' : 'Please check highlighted fields.');
+                feedback.style.display = 'block';
+            }
+        } else if (activeStage === 2) {
+            const valStage2 = document.getElementById('inStage2').value;
+            const reqUnit = currentProblem.isFindingVelocity ? 'm/s' : 'kg';
+            const reqVal = currentProblem.isFindingVelocity ? currentProblem.deltaV : currentProblem.mass;
+
+            const resStage2 = evaluateInput(valStage2, reqVal, reqUnit);
+            document.getElementById('inStage2').className = resStage2.ok ? 'correct' : 'incorrect';
+
+            if (resStage2.ok) {
+                totalCorrect++;
+                updateScoreDisplay();
+
+                feedback.className = 'feedback-banner success';
+                feedback.innerText = 'All Correct.';
+                feedback.style.display = 'block';
+            } else {
+                totalIncorrect++;
+                updateScoreDisplay();
+
+                let errorMsg = 'Error: ';
+                if (resStage2.reason === 'decimal') errorMsg += 'Must include exactly 1 decimal place.';
+                else if (resStage2.reason === 'unit') errorMsg += `Missing or incorrect unit (expected "${reqUnit}").`;
+                else errorMsg += 'Incorrect calculation for Stage 2.';
+
+                feedback.className = 'feedback-banner warning';
+                feedback.innerText = errorMsg;
+                feedback.style.display = 'block';
+            }
+        }
+    }
+
+    function drawGraph() {
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = CSS_WIDTH * dpr;
+        canvas.height = CSS_HEIGHT * dpr;
+
+        ctx.resetTransform();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, CSS_WIDTH, CSS_HEIGHT);
+
+        const margin = { top: 25, right: 30, bottom: 40, left: 55 };
+        const graphW = CSS_WIDTH - margin.left - margin.right;
+        const graphH = CSS_HEIGHT - margin.top - margin.bottom;
+
+        const maxT = Math.ceil(currentProblem.t2 + 1.5);
+        const maxF = Math.ceil((currentProblem.F1 * 1.2) / 10) * 10;
+
+        const xScale = (t) => margin.left + (t / maxT) * graphW;
+        const yScale = (f) => margin.top + graphH - (f / maxF) * graphH;
+
+        ctx.strokeStyle = '#ecf0f1';
+        ctx.lineWidth = 1;
+
+        for (let t = 0; t <= maxT; t++) {
+            ctx.beginPath();
+            ctx.moveTo(xScale(t), margin.top);
+            ctx.lineTo(xScale(t), margin.top + graphH);
+            ctx.stroke();
+
+            ctx.fillStyle = '#7f8c8d';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${t}s`, xScale(t), margin.top + graphH + 18);
+        }
+
+        const fStep = 10;
+        for (let f = 0; f <= maxF; f += fStep) {
+            ctx.beginPath();
+            ctx.moveTo(margin.left, yScale(f));
+            ctx.lineTo(margin.left + graphW, yScale(f));
+            ctx.stroke();
+
+            ctx.fillStyle = '#7f8c8d';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(`${f} N`, margin.left - 8, yScale(f) + 4);
+        }
+
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Time (s)', margin.left + graphW / 2, CSS_HEIGHT - 6);
+
+        ctx.save();
+        ctx.translate(16, margin.top + graphH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText('Force (N)', 0, 0);
+        ctx.restore();
+
+        ctx.strokeStyle = '#2c3e50';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(margin.left, margin.top);
+        ctx.lineTo(margin.left, margin.top + graphH);
+        ctx.lineTo(margin.left + graphW, margin.top + graphH);
+        ctx.stroke();
+
+        const p0 = { x: xScale(0), y: yScale(0) };
+        const p1 = { x: xScale(currentProblem.t1), y: yScale(currentProblem.F1) };
+        const p1_base = { x: xScale(currentProblem.t1), y: yScale(0) };
+        const p2 = { x: xScale(currentProblem.t2), y: yScale(currentProblem.F1) };
+        const p2_base = { x: xScale(currentProblem.t2), y: yScale(0) };
+
+        ctx.fillStyle = 'rgba(211, 84, 0, 0.18)';
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        if (currentProblem.seg1Type === 'rectangle') {
+            ctx.lineTo(xScale(0), yScale(currentProblem.F1));
+        }
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p1_base.x, p1_base.y);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(41, 128, 185, 0.18)';
+        ctx.beginPath();
+        ctx.moveTo(p1_base.x, p1_base.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p2_base.x, p2_base.y);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = '#2980b9';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        if (currentProblem.seg1Type === 'rectangle') {
+            ctx.lineTo(xScale(0), yScale(currentProblem.F1));
+        }
+        ctx.lineTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p2_base.x, p2_base.y);
+        ctx.stroke();
+
+        ctx.strokeStyle = '#7f8c8d';
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p1_base.x, p1_base.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    generateProblem();
+</script>
+
+</body>
+</html>
