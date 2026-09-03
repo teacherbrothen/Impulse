@@ -13,15 +13,15 @@
             align-items: center;
             padding: 20px;
             margin: 0;
-            color: #2c3e50;
+            color: #111111; /* High contrast text */
         }
         .container {
             position: relative;
             background-color: white;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 800px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            max-width: 850px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -29,184 +29,189 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            font-weight: 700;
         }
         .score-tally {
-            color: #2c3e50;
-            background: #edf2f7;
-            padding: 4px 10px;
+            color: #0d1b2a;
+            background: #dcdde1;
+            padding: 6px 14px;
             border-radius: 6px;
         }
-        .score-tally .correct-count { color: #27ae60; }
-        .score-tally .incorrect-count { color: #e67e22; }
+        .score-tally .correct-count { color: #1e8449; }
+        .score-tally .incorrect-count { color: #d35400; }
         .id-tag {
-            color: #95a5a6;
+            color: #2c3e50;
             letter-spacing: 0.5px;
         }
         .header-bar {
-            border-bottom: 2px solid #ecf0f1;
+            border-bottom: 2px solid #bdc3c7;
             padding-bottom: 10px;
             margin-bottom: 15px;
             text-align: center;
         }
         .header-bar h2 {
             margin: 0;
-            font-size: 1.4rem;
-            color: #2c3e50;
+            font-size: 1.8rem;
+            color: #0d1b2a;
         }
         .problem-statement {
-            background-color: #f8f9fa;
-            border-left: 4px solid #3498db;
-            padding: 12px 15px;
+            background-color: #eef2f7;
+            border-left: 5px solid #1f618d;
+            padding: 14px 18px;
             margin-bottom: 15px;
-            font-size: 0.95rem;
-            line-height: 1.4;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #0d1b2a;
         }
         #graphCanvas {
             background: #ffffff;
-            border: 1px solid #dcdde1;
+            border: 2px solid #7f8c8d;
             border-radius: 8px;
             width: 100%;
-            height: 240px;
+            height: 270px;
             display: block;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .hint-text {
-            font-size: 0.82rem;
-            color: #7f8c8d;
+            font-size: 0.95rem;
+            color: #2c3e50;
             text-align: center;
             margin-bottom: 15px;
+            font-weight: 600;
             font-style: italic;
         }
         .stage-box {
-            background: #fafafa;
-            border: 1px solid #e2e8f0;
+            background: #f8f9fa;
+            border: 2px solid #bdc3c7;
             border-radius: 8px;
-            padding: 15px;
+            padding: 18px;
             margin-bottom: 15px;
         }
         .stage-title {
             font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 12px;
-            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 14px;
+            color: #0d1b2a;
         }
         .stage-disabled {
-            opacity: 0.4;
+            opacity: 0.35;
             pointer-events: none;
         }
         .input-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             gap: 10px;
         }
         .input-label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            flex: 1;
+            font-weight: 700;
+            font-size: 1.05rem;
+            flex: 1.1;
             text-align: right;
             padding-right: 10px;
         }
-        .label-seq1 { color: #d35400; }
-        .label-seq2 { color: #2980b9; }
-        .label-total { color: #8e44ad; }
-        .label-stage2 { color: #27ae60; }
+        .label-seq1 { color: #a04000; }
+        .label-seq2 { color: #1f618d; }
+        .label-total { color: #6c3483; }
+        .label-stage2 { color: #1e8449; }
 
         .input-wrapper {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             flex: 1.2;
         }
         input[type="text"] {
-            width: 140px;
-            padding: 6px 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            font-size: 0.9rem;
+            width: 150px;
+            padding: 8px 12px;
+            border: 2px solid #7f8c8d;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: bold;
             text-align: center;
             transition: all 0.2s;
+            color: #111111;
         }
         input[type="text"]:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 4px rgba(52, 152, 219, 0.3);
+            border-color: #1f618d;
+            box-shadow: 0 0 6px rgba(31, 97, 141, 0.4);
         }
         input.correct {
-            border-color: #27ae60;
-            background-color: #e8f8f5;
-            color: #27ae60;
+            border-color: #1e8449;
+            background-color: #d4efdf;
+            color: #145a32;
             font-weight: bold;
         }
         input.incorrect {
-            border-color: #ee9b00;
-            background-color: #fff3cd;
-            color: #b76e00;
+            border-color: #d35400;
+            background-color: #fbeee6;
+            color: #a04000;
             font-weight: bold;
         }
         .btn-unit {
-            background-color: #e67e22;
+            background-color: #d35400;
             color: white;
             border: none;
-            padding: 6px 10px;
-            font-size: 0.8rem;
+            padding: 8px 12px;
+            font-size: 0.95rem;
             font-weight: bold;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: background 0.2s;
         }
-        .btn-unit:hover { background-color: #d35400; }
+        .btn-unit:hover { background-color: #a04000; }
 
         .button-group {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 15px;
+            margin-top: 20px;
         }
         .btn-submit {
-            background-color: #3498db;
+            background-color: #1f618d;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 0.95rem;
+            padding: 12px 24px;
+            font-size: 1.05rem;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
         }
-        .btn-submit:hover { background-color: #2980b9; }
+        .btn-submit:hover { background-color: #154360; }
         .btn-reset {
-            background-color: #e67e22;
+            background-color: #d35400;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 0.95rem;
+            padding: 12px 24px;
+            font-size: 1.05rem;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
         }
-        .btn-reset:hover { background-color: #d35400; }
+        .btn-reset:hover { background-color: #a04000; }
         .feedback-banner {
-            margin-top: 12px;
-            padding: 10px;
+            margin-top: 15px;
+            padding: 12px;
             border-radius: 6px;
             text-align: center;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 1rem;
             display: none;
         }
         .feedback-banner.success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: #d4efdf;
+            color: #145a32;
+            border: 1px solid #abebc6;
             display: block;
         }
         .feedback-banner.warning {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
+            background-color: #fcf3cf;
+            color: #7d6608;
+            border: 1px solid #f9e79f;
             display: block;
         }
     </style>
@@ -290,10 +295,9 @@
 
     const canvas = document.getElementById('graphCanvas');
     const ctx = canvas.getContext('2d');
-    const CSS_WIDTH = 750;
-    const CSS_HEIGHT = 240;
+    const CSS_WIDTH = 800;
+    const CSS_HEIGHT = 270;
 
-    // Helper for standard 1 decimal place rounding
     function roundToOneDecimal(val) {
         return Math.round(val * 10) / 10;
     }
@@ -328,19 +332,18 @@
             el.disabled = false;
         });
 
-        const t1 = (Math.floor(Math.random() * 5) + 2) / 2; // 1.0s to 3.0s
-        const dt2 = (Math.floor(Math.random() * 12) + 8) / 2; // 4.0s to 9.5s
+        // WIDENED TRIANGLE: t1 range expanded to 2.0s - 5.0s
+        const t1 = (Math.floor(Math.random() * 7) + 4) / 2; // 2.0s to 5.0s
+        const dt2 = (Math.floor(Math.random() * 10) + 8) / 2; // 4.0s to 8.5s
         const t2 = t1 + dt2;
         const F1 = (Math.floor(Math.random() * 8) + 3) * 5; // 15N to 50N
 
-        const seg1Type = Math.random() > 0.25 ? 'triangle' : 'rectangle'; 
+        const seg1Type = Math.random() > 0.2 ? 'triangle' : 'rectangle'; 
 
-        // Raw exact area calculations
         let rawArea1 = seg1Type === 'triangle' ? 0.5 * t1 * F1 : t1 * F1;
         let rawArea2 = (t2 - t1) * F1;
         let rawTotalImpulse = rawArea1 + rawArea2;
 
-        // Apply standard rounding to 1 decimal place
         let area1 = roundToOneDecimal(rawArea1);
         let area2 = roundToOneDecimal(rawArea2);
         let totalImpulse = roundToOneDecimal(rawTotalImpulse);
@@ -412,7 +415,6 @@
         }
 
         const numVal = parseFloat(numPart);
-        // Correct check comparing against standard rounded target
         const ok = Math.abs(numVal - targetVal) < 0.05;
         
         return { ok, numVal, reason: ok ? 'none' : 'calculation' };
@@ -513,17 +515,18 @@
         ctx.scale(dpr, dpr);
         ctx.clearRect(0, 0, CSS_WIDTH, CSS_HEIGHT);
 
-        const margin = { top: 25, right: 30, bottom: 40, left: 55 };
+        const margin = { top: 30, right: 35, bottom: 45, left: 65 };
         const graphW = CSS_WIDTH - margin.left - margin.right;
         const graphH = CSS_HEIGHT - margin.top - margin.bottom;
 
         const maxT = Math.ceil(currentProblem.t2 + 1.5);
-        const maxF = Math.ceil((currentProblem.F1 * 1.2) / 10) * 10;
+        const maxF = Math.ceil((currentProblem.F1 * 1.25) / 10) * 10;
 
         const xScale = (t) => margin.left + (t / maxT) * graphW;
         const yScale = (f) => margin.top + graphH - (f / maxF) * graphH;
 
-        ctx.strokeStyle = '#ecf0f1';
+        // Darker Gridlines
+        ctx.strokeStyle = '#bdc3c7';
         ctx.lineWidth = 1;
 
         for (let t = 0; t <= maxT; t++) {
@@ -532,10 +535,10 @@
             ctx.lineTo(xScale(t), margin.top + graphH);
             ctx.stroke();
 
-            ctx.fillStyle = '#7f8c8d';
-            ctx.font = '11px sans-serif';
+            ctx.fillStyle = '#0d1b2a';
+            ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(`${t}s`, xScale(t), margin.top + graphH + 18);
+            ctx.fillText(`${t}s`, xScale(t), margin.top + graphH + 20);
         }
 
         const fStep = 10;
@@ -545,25 +548,27 @@
             ctx.lineTo(margin.left + graphW, yScale(f));
             ctx.stroke();
 
-            ctx.fillStyle = '#7f8c8d';
-            ctx.font = '11px sans-serif';
+            ctx.fillStyle = '#0d1b2a';
+            ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'right';
-            ctx.fillText(`${f} N`, margin.left - 8, yScale(f) + 4);
+            ctx.fillText(`${f} N`, margin.left - 10, yScale(f) + 4);
         }
 
-        ctx.fillStyle = '#2c3e50';
-        ctx.font = 'bold 12px sans-serif';
+        // Axis Titles
+        ctx.fillStyle = '#0d1b2a';
+        ctx.font = 'bold 14px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Time (s)', margin.left + graphW / 2, CSS_HEIGHT - 6);
+        ctx.fillText('Time (s)', margin.left + graphW / 2, CSS_HEIGHT - 8);
 
         ctx.save();
-        ctx.translate(16, margin.top + graphH / 2);
+        ctx.translate(20, margin.top + graphH / 2);
         ctx.rotate(-Math.PI / 2);
         ctx.fillText('Force (N)', 0, 0);
         ctx.restore();
 
-        ctx.strokeStyle = '#2c3e50';
-        ctx.lineWidth = 2;
+        // Main Axis Lines
+        ctx.strokeStyle = '#0d1b2a';
+        ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.moveTo(margin.left, margin.top);
         ctx.lineTo(margin.left, margin.top + graphH);
@@ -576,7 +581,8 @@
         const p2 = { x: xScale(currentProblem.t2), y: yScale(currentProblem.F1) };
         const p2_base = { x: xScale(currentProblem.t2), y: yScale(0) };
 
-        ctx.fillStyle = 'rgba(211, 84, 0, 0.18)';
+        // Fill Area 1 (Orange Tint)
+        ctx.fillStyle = 'rgba(211, 84, 0, 0.35)';
         ctx.beginPath();
         ctx.moveTo(p0.x, p0.y);
         if (currentProblem.seg1Type === 'rectangle') {
@@ -587,7 +593,8 @@
         ctx.closePath();
         ctx.fill();
 
-        ctx.fillStyle = 'rgba(41, 128, 185, 0.18)';
+        // Fill Area 2 (Blue Tint)
+        ctx.fillStyle = 'rgba(31, 97, 141, 0.35)';
         ctx.beginPath();
         ctx.moveTo(p1_base.x, p1_base.y);
         ctx.lineTo(p1.x, p1.y);
@@ -596,8 +603,9 @@
         ctx.closePath();
         ctx.fill();
 
-        ctx.strokeStyle = '#2980b9';
-        ctx.lineWidth = 3;
+        // Plot Line
+        ctx.strokeStyle = '#154360';
+        ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.moveTo(p0.x, p0.y);
         if (currentProblem.seg1Type === 'rectangle') {
@@ -608,9 +616,10 @@
         ctx.lineTo(p2_base.x, p2_base.y);
         ctx.stroke();
 
-        ctx.strokeStyle = '#7f8c8d';
-        ctx.setLineDash([4, 4]);
-        ctx.lineWidth = 1.5;
+        // Divider Line
+        ctx.strokeStyle = '#2c3e50';
+        ctx.setLineDash([5, 5]);
+        ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p1_base.x, p1_base.y);
