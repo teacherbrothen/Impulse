@@ -286,7 +286,101 @@
         <button class="btn-reset" onclick="generateProblem()">New Problem</button>
     </div>
 </div>
+<!-- ========================================== -->
+<!-- PROOF CAPTURE COMPONENT (DROP-IN SNIPPET) -->
+<!-- ========================================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<style>
+    .proof-copy-section {
+        margin-top: 22px;
+        padding-top: 16px;
+        border-top: 1px dashed #dcdde1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .proof-copy-btn {
+        background-color: #8e44ad;
+        color: #ffffff;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+    .proof-copy-btn:hover { background-color: #732d91; }
+    .proof-copy-btn:active { transform: scale(0.99); }
+    .proof-copy-hint {
+        font-size: 0.8em;
+        color: #7f8c8d;
+        text-align: center;
+    }
+</style>
+
+<div class="proof-copy-section" data-html2canvas-ignore="true">
+    <button class="proof-copy-btn" onclick="copyProofToClipboard(this)">📋 Copy Proof to Clipboard</button>
+    <span class="proof-copy-hint">Click anytime to copy your verification proof to paste (Ctrl+V) into Brightspace.</span>
+</div>
+
+<script>
+async function copyProofToClipboard(btn) {
+    const originalText = btn.innerText;
+    btn.innerText = "⏳ Capturing proof...";
+    btn.disabled = true;
+
+    // Automatically detects .quiz-card, .sim-card, #quiz-card, #sim-card, or parent card
+    const targetElement = 
+        document.querySelector('.quiz-card') || 
+        document.querySelector('.sim-card') || 
+        document.getElementById('quiz-card') || 
+        document.getElementById('sim-card') || 
+        btn.closest('div[class*="card"]') || 
+        document.body;
+
+    try {
+        const canvas = await html2canvas(targetElement, {
+            backgroundColor: "#ffffff",
+            scale: 2 // High-DPI crisp capture
+        });
+
+        canvas.toBlob(async (blob) => {
+            if (!blob) throw new Error("Blob creation failed");
+
+            try {
+                await navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                ]);
+                btn.innerText = "✅ Copied to Clipboard!";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }, 2500);
+            } catch (err) {
+                console.warn('Clipboard write error:', err);
+                alert('Could not copy directly to clipboard. You can take a standard screenshot (Win+Shift+S or Cmd+Shift+4).');
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }, 'image/png');
+    } catch (err) {
+        console.error('Capture error:', err);
+        alert('Failed to capture proof.');
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
+</script>
+<!-- ========================================== -->
+<!-- END PROOF CAPTURE COMPONENT                -->
+<!-- ========================================== -->
 <script>
     let currentProblem = {};
     let activeStage = 1;
